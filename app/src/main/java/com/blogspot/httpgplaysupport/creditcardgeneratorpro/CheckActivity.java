@@ -7,9 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.widget.TextView;
 
-import com.google.android.gms.ads.MobileAds;
-
-public class MainActivity extends AppCompatActivity {
+public class CheckActivity extends AppCompatActivity {
 
     private TextView mTextMessage;
 
@@ -36,10 +34,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        // Sample AdMob app ID: ca-app-pub-3940256099942544~3347511713
-        MobileAds.initialize(this, "YOUR_ADMOB_APP_ID");
+        setContentView(R.layout.activity_check);
 
         mTextMessage = (TextView) findViewById(R.id.message);
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
