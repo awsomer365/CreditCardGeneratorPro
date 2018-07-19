@@ -4,4 +4,5 @@
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
     <string name="title_activity_check">CheckActivity</string>
+    <string name="adID">ca-app-pub-3940256099942544/6300978111</string>
 </resources>
