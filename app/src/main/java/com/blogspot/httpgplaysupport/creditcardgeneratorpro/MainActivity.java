@@ -1,9 +1,13 @@
 package com.blogspot.httpgplaysupport.creditcardgeneratorpro;
 
+import android.content.Intent;
+import android.media.MediaDrm;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.Display;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -17,6 +21,7 @@ import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.AdRequest;
 
 import java.security.SecureRandom;
+import java.util.Calendar;
 import java.util.Random;
 
 import static java.lang.Math.exp;
@@ -24,10 +29,11 @@ import static java.lang.Math.exp;
 public class MainActivity extends AppCompatActivity {
 
     private AdView mAdView;
-    private TextView mTextMessage;
 
-    double cardIIN;
-    double cardUNLength;
+    int cardIIN;
+    int cardUNLength;
+
+    static String finalCardNumString;
 
     static final String CVV = "0123456789";
     static SecureRandom cvvRnd = new SecureRandom();
@@ -36,25 +42,6 @@ public class MainActivity extends AppCompatActivity {
     ArrayAdapter<CharSequence> adapter;
 
 
-    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
-            = new BottomNavigationView.OnNavigationItemSelectedListener() {
-
-        @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            switch (item.getItemId()) {
-                case R.id.navigation_home:
-                    mTextMessage.setText(R.string.title_home);
-                    return true;
-                case R.id.navigation_dashboard:
-                    mTextMessage.setText(R.string.title_dashboard);
-                    return true;
-                case R.id.navigation_notifications:
-                    mTextMessage.setText(R.string.title_notifications);
-                    return true;
-            }
-            return false;
-        }
-    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,19 +52,12 @@ public class MainActivity extends AppCompatActivity {
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
 
-        mTextMessage = (TextView) findViewById(R.id.message);
-        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
-        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-
-
-        Button genButton = (Button) findViewById(R.id.button2);
-
-
         //sets up adapter to read array list used to populate spinner widget.
         cardSelect = (Spinner) findViewById(R.id.cardSelect);
         adapter = ArrayAdapter.createFromResource(this, R.array.card_arrays, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         cardSelect.setAdapter(adapter);
+
 
         //can use getItemIdAtPosition or getItemAtPosition to identify which item in array is selected
         //
@@ -98,17 +78,24 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    public void changeActivity(View view) {
+        Intent intent = new Intent(this, CheckActivity.class);
+       // intent.putExtra(finalCardNumString);
+        startActivity(intent);
+
+    }
+
+
     public void buttonOnClick(View v) {
         // do something when the button is clicked
-        Button button = (Button) v;
 
-        TextView displayView = (TextView) findViewById(R.id.cardNumberView);
-        TextView cvvViewText = (TextView) findViewById(R.id.cvvView);
-        TextView yearView = (TextView) findViewById(R.id.yearView);
+        TextView displayView = findViewById(R.id.cardNumberView);
+        TextView cvvViewText = findViewById(R.id.cvvView);
+        TextView yearView = findViewById(R.id.yearView);
         // TextView monthView = (TextView) findViewById(R.id.monthView);
 
         Random yearRnd = new Random();
-        int number = yearRnd.nextInt(16) + 2018;
+        int number = yearRnd.nextInt(16) + Calendar.getInstance().get(Calendar.YEAR);;
         String myString = String.valueOf(number);
 
         Random monthRnd = new Random();
@@ -116,14 +103,18 @@ public class MainActivity extends AppCompatActivity {
         String monthString = String.valueOf(monthNumber);
 
         cardLength();
-        double cardPreCheckNum = cardIIN * Math.pow(cardUNLength, 10);
-        //cardPreCheckNum = cardPreCheckNum + cvvString(cardUNLength);
-        //cardIIN = cardIIN * Math.pow(cardUNLength, 10);
-        cardCheckSum();
+
+        String cardPreCheckNum = String.valueOf(cardIIN) + String.valueOf(cvvString(cardUNLength));
+
+        calculateCheckDigit(cardPreCheckNum);
+
+        String cardNumberString = cardPreCheckNum + calculateCheckDigit(cardPreCheckNum);
+        finalCardNumString = cardNumberString;
 
 
-        //displayView.setText(String.valueOf(cardIIN) + String.valueOf(cvvString(cardUNLength)));
-        //displayView.setText(String.valueOf(preCheckNumber));
+        displayView.setText(finalCardNumString);
+
+        Log.d("Credit Card Number: ", "Value: " + cardNumberString);
 
 
         //displayView.setText(cvvString(4).toString() + "-" + cvvString(4).toString()+ "-" + cvvString(4).toString()+ "-" + cvvString(4).toString());
@@ -179,7 +170,6 @@ public class MainActivity extends AppCompatActivity {
                 cardUNLength = 11;
             } else if (threeValue == 3) {
                 cardIIN = new Random().nextInt(40 - 38) + 38;
-                ;
                 cardUNLength = 13;
             }
         } else if (cardSelect.getSelectedItemId() == 5) {
@@ -201,7 +191,35 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    int cardCheckSum(){
-    return 0;
+    public static String calculateCheckDigit(String card) {
+        if (card == null)
+            return null;
+        String digit;
+        /* convert to array of int for simplicity */
+        int[] digits = new int[card.length()];
+        for (int i = 0; i < card.length(); i++) {
+            digits[i] = Character.getNumericValue(card.charAt(i));
+        }
+
+        /* double every other starting from right - jumping from 2 in 2 */
+        for (int i = digits.length - 1; i >= 0; i -= 2)	{
+            digits[i] += digits[i];
+
+            /* taking the sum of digits grater than 10 - simple trick by substract 9 */
+            if (digits[i] >= 10) {
+                digits[i] = digits[i] - 9;
+            }
+        }
+        int sum = 0;
+        for (int i = 0; i < digits.length; i++) {
+            sum += digits[i];
+        }
+        /* multiply by 9 step */
+        sum = sum * 9;
+
+        /* convert to string to be easier to take the last digit */
+        digit = sum + "";
+        return digit.substring(digit.length() - 1);
     }
+
 }

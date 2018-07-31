@@ -1,8 +1,9 @@
 <resources>
-    <string name="app_name">CreditCardGeneratorPro</string>
+    <string name="app_name">Credit Card Generator Pro</string>
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
-    <string name="title_activity_check">CheckActivity</string>
+    <string name="title_activity_check">Credit Card Authenticator</string>
+    <string name="invalid_code">Invalid Number</string>
     <string name="adID">ca-app-pub-3940256099942544/6300978111</string>
 </resources>

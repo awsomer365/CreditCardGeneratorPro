@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="card_arrays">
+
+        <item>Visa</item>
+        <item>MasterCard</item>
+        <item>American Express</item>
+        <item>Discover Card</item>
+        <item>Diners Club</item>
+        <item>China UnionPay</item>
+        <item>RuPay</item>
+        <item>JCB</item>
+
+    </string-array>
+    <string-array name="card_IIN">
+        <item>4</item>
+        <item>34</item>
+        <item>37</item>
+        <item>57</item>
+
+    </string-array>
+</resources>
