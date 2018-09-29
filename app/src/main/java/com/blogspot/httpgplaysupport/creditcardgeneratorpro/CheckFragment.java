@@ -23,14 +23,8 @@ import com.google.android.gms.ads.reward.RewardItem;
 import com.google.android.gms.ads.reward.RewardedVideoAd;
 import com.google.android.gms.ads.reward.RewardedVideoAdListener;
 
-import org.w3c.dom.Text;
-
 import static com.blogspot.httpgplaysupport.creditcardgeneratorpro.MainFragment.calculateCheckDigit;
 
-
-/**
- * A simple {@link Fragment} subclass.
- */
 public class CheckFragment extends Fragment implements View.OnClickListener, RewardedVideoAdListener {
 
 
@@ -47,10 +41,6 @@ public class CheckFragment extends Fragment implements View.OnClickListener, Rew
     private TextView unText;
     private TextView luhnText;
     private TextView checkText;
-
-    private Button checkButton;
-    private Button switchFragButton;
-    private Button unlockButton;
 
 
     private String cardIssuer;
@@ -87,13 +77,13 @@ public class CheckFragment extends Fragment implements View.OnClickListener, Rew
         mRewardedVideoAd.setRewardedVideoAdListener(this);
         loadRewardedVideoAd();
 
-        checkButton = myFragmentView.findViewById(R.id.checkButton);
+        Button checkButton = myFragmentView.findViewById(R.id.checkButton);
         checkButton.setOnClickListener(this);
 
-        switchFragButton = myFragmentView.findViewById(R.id.switchGenButton);
+        Button switchFragButton = myFragmentView.findViewById(R.id.switchGenButton);
         switchFragButton.setOnClickListener(this);
 
-        unlockButton = myFragmentView.findViewById(R.id.unlockBtn);
+        Button unlockButton = myFragmentView.findViewById(R.id.unlockBtn);
         unlockButton.setOnClickListener(this);
 
         getUnlockKeyValue();
@@ -106,7 +96,7 @@ public class CheckFragment extends Fragment implements View.OnClickListener, Rew
 
         return myFragmentView;
     }
-
+//retrieves saved value called "unlocks_key"
     private void getUnlockKeyValue() {
         SharedPreferences sharedPreferences = this.getActivity().getSharedPreferences("unlocks_key", Context.MODE_PRIVATE);
 
@@ -118,6 +108,7 @@ public class CheckFragment extends Fragment implements View.OnClickListener, Rew
         }
     }
 
+    //saves "unlock_key"
     private void setUnlockKeyValue() {
         SharedPreferences sharedPreferences = this.getActivity().getSharedPreferences("unlocks_key", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -128,11 +119,12 @@ public class CheckFragment extends Fragment implements View.OnClickListener, Rew
     }
 
     @Override
+    //Button onclick functions
     public void onClick(View v){
 
         switch (v.getId()) {
             case R.id.unlockBtn:
-
+                //check if ad has loaded and ready to display
                 if (mRewardedVideoAd.isLoaded()) {
                     mRewardedVideoAd.show();
                     rewardState = 0;
@@ -152,6 +144,7 @@ public class CheckFragment extends Fragment implements View.OnClickListener, Rew
 
         }
 
+        //switches layout to MainFragment.java
         switch (v.getId()) {
             case R.id.switchGenButton:
                 Log.d("Credit Card Number: ", "Value: ");
@@ -161,10 +154,9 @@ public class CheckFragment extends Fragment implements View.OnClickListener, Rew
                 break;
 
         }
+        //Check button that checks user input against luhn algorithm and changes text to red or green to say if valid
         switch (v.getId()){
             case R.id.checkButton:
-
-                // do something when the button is clicked
 
                 String inputNum = cardInput.getText().toString();
 
@@ -202,6 +194,7 @@ public class CheckFragment extends Fragment implements View.OnClickListener, Rew
         }
     }
 
+    //error messages if card is not 16 digits or if user has no mor unlocks
     public void invalidError(){
         modCheckBx.setChecked(false);
         luhnText.setText(R.string.invalid_code);
@@ -213,6 +206,7 @@ public class CheckFragment extends Fragment implements View.OnClickListener, Rew
         unText.setText(R.string.invalid_code);
     }
 
+    //Google ad function to load video ads
     private void loadRewardedVideoAd() {
         mRewardedVideoAd.loadAd("ca-app-pub-9282720184335688/6522830889",
                 new AdRequest.Builder().build());
@@ -227,11 +221,12 @@ public class CheckFragment extends Fragment implements View.OnClickListener, Rew
         return checkDigit == digit.charAt(0);
     }
 
-    //CheckIIn identifies if user input number has a recognized IIN
+    //CheckIIn identifies if user input number has a recognized IIN.
     public void checkIIN(String card) {
         int i;
         int x;
         boolean foundIIN = false;
+        //loads list of card INN numbers and sets to issuerArray
         Resources res = getResources();
         String[] issuerArray = res.getStringArray(R.array.card_arrays);
         x = 4;
@@ -325,6 +320,7 @@ public class CheckFragment extends Fragment implements View.OnClickListener, Rew
         }
     }
 
+    //shows user the User number portion of card number
     public void checkUn(String card) {
         unText.setTextColor(this.getResources().getColor(R.color.text_green));
         String personalAcctNum = card.substring(cardUnStringVal, card.length() - 1);
@@ -332,6 +328,7 @@ public class CheckFragment extends Fragment implements View.OnClickListener, Rew
     }
 
 
+    //Google ad functions automatically loaded
     @Override
     public void onRewardedVideoAdLoaded() {
 
@@ -354,6 +351,7 @@ public class CheckFragment extends Fragment implements View.OnClickListener, Rew
 
     }
 
+    //Rewards user with unlocks after they watch an ad
     @Override
     public void onRewarded(RewardItem rewardItem) {
         checkInt = checkInt + rewardItem.getAmount();
@@ -374,9 +372,7 @@ public class CheckFragment extends Fragment implements View.OnClickListener, Rew
 
     @Override
     public void onRewardedVideoAdFailedToLoad(int i) {
-
         rewardState = i;
-
     }
 
     @Override

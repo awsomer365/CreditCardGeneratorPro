@@ -21,9 +21,6 @@ import java.util.Calendar;
 import java.util.Random;
 
 
-/**
- * A simple {@link Fragment} subclass.
- */
 public class MainFragment extends Fragment implements View.OnClickListener {
 
     int cardIIN;
@@ -64,7 +61,6 @@ public class MainFragment extends Fragment implements View.OnClickListener {
 
 
         //can use getItemIdAtPosition or getItemAtPosition to identify which item in array is selected
-        //
         cardSelect.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -78,17 +74,14 @@ public class MainFragment extends Fragment implements View.OnClickListener {
 
             }
         });
-
-
-
-
         return myFragmentView;
     }
 
 
     @Override
+    //functions for when button with specific id is clicked
     public void onClick(View v){
-
+        //switches to CheckFragment layout file
         switch (v.getId()) {
             case R.id.checkFragmentButton:
                 Log.d("Credit Card Number: ", "Value: ");
@@ -99,13 +92,13 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                 break;
 
         }
+        //generate button
         switch (v.getId()){
             case R.id.button:
 
                 TextView displayView = getView().findViewById(R.id.cardNumberView);
                 TextView cvvViewText = getView().findViewById(R.id.cvvView);
                 TextView yearView = getView().findViewById(R.id.yearView);
-                // TextView monthView = (TextView) findViewById(R.id.monthView);
 
                 Random yearRnd = new Random();
                 int number = yearRnd.nextInt(16) + Calendar.getInstance().get(Calendar.YEAR);;
@@ -129,11 +122,8 @@ public class MainFragment extends Fragment implements View.OnClickListener {
 
                 Log.d("Credit Card Number: ", "Value: " + cardNumberString);
 
-
-                //displayView.setText(cvvString(4).toString() + "-" + cvvString(4).toString()+ "-" + cvvString(4).toString()+ "-" + cvvString(4).toString());
                 cvvViewText.setText(cvvString(3).toString());
                 yearView.setText(monthString + "/" + myString);
-                //monthView.setText(monthString);
 
 
                 break;
@@ -141,6 +131,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         }
     }
 
+    //creates random string for credit card number
     String cvvString(int len) {
         StringBuilder sb = new StringBuilder(len);
         for (int i = 0; i < len; i++)
@@ -208,21 +199,18 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         }
     }
 
+    //uses Luhn algorithm to generate last checksum digit in card number
     public static String calculateCheckDigit(String card) {
         if (card == null)
             return null;
         String digit;
-        /* convert to array of int for simplicity */
+        /* convert generated card string to array int */
         int[] digits = new int[card.length()];
         for (int i = 0; i < card.length(); i++) {
             digits[i] = Character.getNumericValue(card.charAt(i));
         }
-
-        /* double every other starting from right - jumping from 2 in 2 */
         for (int i = digits.length - 1; i >= 0; i -= 2)    {
             digits[i] += digits[i];
-
-            /* taking the sum of digits grater than 10 - simple trick by substract 9 */
             if (digits[i] >= 10) {
                 digits[i] = digits[i] - 9;
             }
@@ -231,10 +219,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         for (int i = 0; i < digits.length; i++) {
             sum += digits[i];
         }
-        /* multiply by 9 step */
         sum = sum * 9;
-
-        /* convert to string to be easier to take the last digit */
         digit = sum + "";
         return digit.substring(digit.length() - 1);
     }
