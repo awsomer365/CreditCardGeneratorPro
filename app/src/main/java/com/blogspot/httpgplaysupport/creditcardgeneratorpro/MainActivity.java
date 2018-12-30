@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
 
         mAdView = findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().build();
-        mAdView.loadAd(adRequest);
+        //mAdView.loadAd(adRequest);
 
         mainFragment = new MainFragment();
         FragmentManager manager = getFragmentManager();

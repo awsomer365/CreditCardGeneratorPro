@@ -5,9 +5,11 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@mipmap/background"
     android:paddingLeft="0dp"
     android:paddingRight="0dp"
     tools:context=".MainActivity">
+
 
     <com.google.android.gms.ads.AdView
         android:id="@+id/adView"

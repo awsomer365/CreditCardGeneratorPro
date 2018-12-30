@@ -47,7 +47,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         // Inflate the layout for this fragment
         View myFragmentView = inflater.inflate(R.layout.fragment_main, container, false);
 
-        Button switchFragButton = myFragmentView.findViewById(R.id.checkFragmentButton);
+        ImageButton switchFragButton = myFragmentView.findViewById(R.id.checkFragmentButton);
         switchFragButton.setOnClickListener(this);
 
         ImageButton genButton = myFragmentView.findViewById(R.id.button);
@@ -55,7 +55,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
 
         //sets up adapter to read array list used to populate spinner widget.
         cardSelect = (Spinner) myFragmentView.findViewById(R.id.cardSelect);
-        adapter = ArrayAdapter.createFromResource(getActivity(), R.array.card_arrays, android.R.layout.simple_spinner_item);
+        adapter = ArrayAdapter.createFromResource(getActivity(), R.array.card_arrays, R.layout.spinner_layout);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         cardSelect.setAdapter(adapter);
 

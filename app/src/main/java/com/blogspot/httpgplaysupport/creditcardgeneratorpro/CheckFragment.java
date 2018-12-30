@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -77,13 +78,13 @@ public class CheckFragment extends Fragment implements View.OnClickListener, Rew
         mRewardedVideoAd.setRewardedVideoAdListener(this);
         loadRewardedVideoAd();
 
-        Button checkButton = myFragmentView.findViewById(R.id.checkButton);
+        ImageButton checkButton = myFragmentView.findViewById(R.id.checkButton);
         checkButton.setOnClickListener(this);
 
-        Button switchFragButton = myFragmentView.findViewById(R.id.switchGenButton);
+        ImageButton switchFragButton = myFragmentView.findViewById(R.id.switchGenButton);
         switchFragButton.setOnClickListener(this);
 
-        Button unlockButton = myFragmentView.findViewById(R.id.unlockBtn);
+        ImageButton unlockButton = myFragmentView.findViewById(R.id.unlockBtn);
         unlockButton.setOnClickListener(this);
 
         getUnlockKeyValue();
